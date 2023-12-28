@@ -1,7 +1,6 @@
 import os
 import sys
-from typing import Union
-from typing_extensions import Literal
+from typing import Union, Literal
 
 import gradio as gr
 import tempfile
@@ -24,30 +23,34 @@ def tts(
         text: str,
         model: Union[str, Literal["tts-1", "tts-1-hd"]],
         voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
-        output_file_format: Literal["mp3", "opus", "aac", "flac", ""] = "",
+        output_file_format: Literal["mp3", "opus", "aac", "flac"] = "mp3",
         speed: float = 1.0
 ):
-    try:
-        client = OpenAI(api_key=openai_key)
+    if len(text) > 0:
+        try:
+            client = OpenAI(api_key=openai_key)
 
-        response = client.audio.speech.create(
-            model=model,
-            voice=voice,
-            input=text,
-            response_format=output_file_format,
-            speed=speed
-        )
+            response = client.audio.speech.create(
+                model=model,
+                voice=voice,
+                input=text,
+                response_format=output_file_format,
+                speed=speed
+            )
 
-    except Exception as error:
-        print(str(error))
-        raise gr.Error("An error occurred while generating speech. Please check your API key and come back try again.")
+        except Exception as error:
+            print(str(error))
+            raise gr.Error(
+                "An error occurred while generating speech. Please check your API key and come back try again.")
 
-    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_file:
-        temp_file.write(response.content)
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_file:
+            temp_file.write(response.content)
 
-    temp_file_path = temp_file.name
+        temp_file_path = temp_file.name
 
-    return temp_file_path
+        return temp_file_path
+    else:
+        return "1-second-of-silence.mp3"
 
 
 with gr.Blocks() as demo:
