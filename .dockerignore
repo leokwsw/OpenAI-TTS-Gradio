@@ -1,0 +1,29 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Python virtual environment
+venv/
+
+# Ignore pipenv files
+Pipfile
+Pipfile.lock
+
+# Ignore other Python specific files
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Ignore environment files
+*.env*
+
+# Ignore git files
+.git/
+
+# Ignore mp3 files
+*.mp3

@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+server_name = os.getenv("SERVER_NAME", "127.0.0.1")
 openai_key = os.getenv("OPENAI_KEY")
 
 if openai_key == "<YOUR_OPENAI_KEY>":
@@ -71,7 +72,7 @@ with gr.Blocks() as demo:
     text.submit(fn=tts, inputs=[text, model, voice, output_file_format, speed], outputs=output_audio, api_name="tts")
     btn.click(fn=tts, inputs=[text, model, voice, output_file_format, speed], outputs=output_audio, api_name=False)
 
-demo.launch()
+demo.launch(server_name=server_name)
 
 # curl --location "http://127.0.0.1:7860/api/tts" \
 # --header "Content-Type: application/json" \
